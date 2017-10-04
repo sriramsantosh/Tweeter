@@ -67,6 +67,17 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 
+	public void getMentionsTimeline(String  maxId, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("/statuses/mentions_timeline.json");
+		// Can specify query string params directly or through RequestParams.
+		RequestParams params = new RequestParams();
+		params.put("format", "json");
+		params.put("count", 25);
+		params.put("since_id", 1);
+		if(maxId!=null)
+			params.put("max_id", maxId);
+		client.get(apiUrl, params, handler);
+	}
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
 	 * 	  i.e getApiUrl("statuses/home_timeline.json");
