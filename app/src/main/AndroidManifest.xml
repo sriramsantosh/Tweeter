@@ -33,7 +33,8 @@
                     android:scheme="@string/intent_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name="com.aripir.apps.tweeter.activity.TimeLineActivity"></activity>
+        <activity android:name="com.aripir.apps.tweeter.activity.TimeLineActivity" />
+        <activity android:name="com.aripir.apps.tweeter.activity.ProfileActivity"></activity>
     </application>
 
 </manifest>

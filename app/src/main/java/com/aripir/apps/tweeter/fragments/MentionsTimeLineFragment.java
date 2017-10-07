@@ -27,7 +27,6 @@ public class MentionsTimeLineFragment extends TweetsListFragment {
 
 
     private TwitterClient twitterClient;
-    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Nullable
     @Override
@@ -48,17 +47,6 @@ public class MentionsTimeLineFragment extends TweetsListFragment {
         // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
 
         pbLoading.setVisibility(View.VISIBLE);
-
-
-//        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//                pbLoadMore.setVisibility(View.VISIBLE);
-//                populateMentionsTimeLine(getCurrentMaxId());
-//            }
-//        };
-//
-//        rvTweets.addOnScrollListener(scrollListener);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

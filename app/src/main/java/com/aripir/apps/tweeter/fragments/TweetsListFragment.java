@@ -30,7 +30,7 @@ import java.util.List;
  * Created by saripirala on 10/3/17.
  */
 
-public class TweetsListFragment extends Fragment {
+public class TweetsListFragment extends Fragment implements NewTweetDialogFragment.OnCompleteListener {
 
     protected TweetAdapter tweetAdapter;
     protected LinearLayoutManager layoutManager;
@@ -122,4 +122,10 @@ public class TweetsListFragment extends Fragment {
     }
 
 
+    @Override
+    public void onComplete(String tweetText) {
+        clearTweets();
+        activateLoading();
+       // postTweet(tweetText);
+    }
 }

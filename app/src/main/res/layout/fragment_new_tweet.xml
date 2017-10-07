@@ -36,7 +36,7 @@
         android:layout_toStartOf="@+id/tweetBtn"
         android:text="@string/oneforty"
         android:layout_marginBottom="25dp"
-        android:textColor="@color/colorGrey" />
+        android:textColor="@color/colorBlack" />
 
     <ImageButton
         android:id="@+id/ibCancel"

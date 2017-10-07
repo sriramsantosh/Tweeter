@@ -14,6 +14,9 @@ public class User {
     public String screenName;
     public String profieImageUrl;
     public boolean isVerified;
+    public String tagLine;
+    public int followersCount;
+    public int followingCount;
 
 
     public static  User fromJSON(JSONObject jsonObject) throws JSONException{
@@ -24,6 +27,9 @@ public class User {
         user.screenName = jsonObject.getString("screen_name");
         user.profieImageUrl = jsonObject.getString("profile_image_url");
         user.isVerified = jsonObject.getBoolean("verified");
+        user.tagLine = jsonObject.getString("description");
+        user.followersCount = jsonObject.getInt("followers_count");
+        user.followingCount = jsonObject.getInt("friends_count");
 
         return user;
     }

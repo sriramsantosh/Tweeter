@@ -3,4 +3,5 @@
     <color name="colorPictonBlue">#45ABF0</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorGrey">#fda8a5a5</color>
+    <color name="colorBlack">#000000</color>
 </resources>

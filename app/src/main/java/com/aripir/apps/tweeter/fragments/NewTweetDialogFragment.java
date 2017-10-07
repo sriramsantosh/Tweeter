@@ -73,8 +73,7 @@ public class NewTweetDialogFragment extends DialogFragment implements TextView.O
         // Show soft keyboard automatically and request focus to field
         mEtTweetBody.requestFocus();
         mEtTweetBody.setSelection(0);
-        getDialog().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         mBtnTweet.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +131,7 @@ public class NewTweetDialogFragment extends DialogFragment implements TextView.O
     public static interface OnCompleteListener {
         public abstract void onComplete(String tweetText);
     }
+
 
 
 }

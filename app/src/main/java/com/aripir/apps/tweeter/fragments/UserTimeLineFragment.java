@@ -2,20 +2,14 @@ package com.aripir.apps.tweeter.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
-import com.aripir.apps.tweeter.listeners.EndlessRecyclerViewScrollListener;
 import com.aripir.apps.tweeter.network.TwitterApplication;
 import com.aripir.apps.tweeter.network.TwitterClient;
-import com.codepath.apps.tweeter.R;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -24,13 +18,21 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by saripirala on 10/3/17.
+ * Created by saripirala on 10/4/17.
  */
 
-public class HomeTimeLineFragment extends TweetsListFragment implements NewTweetDialogFragment.OnCompleteListener{
+public class UserTimeLineFragment extends TweetsListFragment {
 
     private TwitterClient twitterClient;
-    private EndlessRecyclerViewScrollListener scrollListener;
+
+    public static UserTimeLineFragment newInstance(String screenName){
+        UserTimeLineFragment userTimeLineFragment = new UserTimeLineFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", screenName);
+
+        userTimeLineFragment.setArguments(bundle);
+        return userTimeLineFragment;
+    }
 
     @Nullable
     @Override
@@ -42,7 +44,7 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         twitterClient = TwitterApplication.getRestClient();
-        populateTimeLine(null);
+        populateUserTimeLine(null);
     }
 
     @Override
@@ -52,17 +54,6 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
 
         pbLoading.setVisibility(View.VISIBLE);
 
-
-        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                pbLoadMore.setVisibility(View.VISIBLE);
-                populateTimeLine(getCurrentMaxId());
-            }
-        };
-
-        rvTweets.addOnScrollListener(scrollListener);
-
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -71,7 +62,7 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
                 // once the network request has completed successfully.
 
                 Log.d("DEBUG", "SWIPE");
-                  swipeToRefresh();
+                swipeToRefresh();
             }
         });
         // Configure the refreshing colors
@@ -84,8 +75,12 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
         Log.d("DEBUG", "onViewCreated");
     }
 
-    private void populateTimeLine(String maxId) {
-        twitterClient.getHomeTimeline(maxId, new JsonHttpResponseHandler(){
+
+
+    private void populateUserTimeLine(String maxId) {
+
+        String screenName = getArguments().getString("screen_name");
+        twitterClient.getUserTimeline(screenName, new JsonHttpResponseHandler(){
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -123,38 +118,11 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
     }
 
 
-    @Override
-    public void onComplete(String tweetText) {
-        clearTweets();
-        activateLoading();
-        postTweet(tweetText);
-    }
-
-    private void postTweet(String tweetText){
-
-        twitterClient.composeTweet(tweetText, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Log.d("SUCCESS", new String(responseBody));
-                //tweets.clear();
-                populateTimeLine(null);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("FAILURE", new String(responseBody));
-
-            }
-        });
-
-    }
-
     public void swipeToRefresh() {
         tweets.clear();
         tweetAdapter.notifyDataSetChanged();
-        populateTimeLine(null); // This will bring the latest 25 tweets
+        populateUserTimeLine(null); // This will bring the latest 25 tweets
         swipeContainer.setRefreshing(false);
     }
-
 
 }
