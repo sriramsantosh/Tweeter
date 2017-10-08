@@ -2,7 +2,7 @@ package com.aripir.apps.tweeter.network;
 
 import android.content.Context;
 
-import com.codepath.apps.tweeter.R;
+import com.aripir.apps.tweeter.R;
 import com.codepath.oauth.OAuthBaseClient;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.api.BaseApi;
@@ -24,8 +24,8 @@ import com.loopj.android.http.RequestParams;
 public class TwitterClient extends OAuthBaseClient {
 	public static final BaseApi REST_API_INSTANCE = TwitterApi.instance(); // Change this
 	public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
-	public static final String REST_CONSUMER_KEY = "WjhWAaML7zUvlNZMXJplL7rTU";       // Change this
-	public static final String REST_CONSUMER_SECRET = "sEsMoqRack8csYJAjy9uHZlHptUKgGyGn0BdSi72PGYRKNQpOw"; // Change this
+	public static final String REST_CONSUMER_KEY = "DubqIkYWlAZ74ElOA0IWtAjMa";       // Change this
+	public static final String REST_CONSUMER_SECRET = "Ss0UnCOX8ndnSretzlAC8NOULzuyJRMXNgngtE7jXGLHHsNumr"; // Change this
 
 	// Landing page to indicate the OAuth flow worked in case Chrome for Android 25+ blocks navigation back to the app.
 	public static final String FALLBACK_URL = "https://codepath.github.io/android-rest-client-template/success.html";
@@ -79,7 +79,7 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
-	public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler) {
+	public void getUserTimeline(String screenName, String  maxId, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("/statuses/user_timeline.json");
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
@@ -87,6 +87,8 @@ public class TwitterClient extends OAuthBaseClient {
 		params.put("count", 10);
 		if(screenName != null)
 			params.put("screen_name", screenName);
+		if(maxId!=null)
+			params.put("max_id", maxId);
 		client.get(apiUrl, params, handler);
 	}
 
@@ -95,6 +97,53 @@ public class TwitterClient extends OAuthBaseClient {
 		// Can specify query string params directly or through RequestParams.
 
 		client.get(apiUrl, null, handler);
+	}
+
+	public void getUserLookupInfo(String screenName, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("/users/lookup.json");
+		// Can specify query string params directly or through RequestParams.
+		RequestParams params = new RequestParams();
+		params.put("format", "json");
+		params.put("screen_name", screenName);
+
+		client.get(apiUrl, params, handler);
+	}
+
+	public void favoriteTweet(String id, AsyncHttpResponseHandler handler){
+		String apiUrl = getApiUrl("/favorites/create.json");
+		RequestParams params = new RequestParams();
+		params.put("format", "json");
+		params.put("id", id);
+		client.post(apiUrl, params, handler);
+	}
+
+	public void unFavoriteTweet(String id, AsyncHttpResponseHandler handler){
+		String apiUrl = getApiUrl("/favorites/destroy.json");
+		RequestParams params = new RequestParams();
+		params.put("format", "json");
+		params.put("id", id);
+		client.post(apiUrl, params, handler);
+	}
+
+
+	public void reTweet(String id, AsyncHttpResponseHandler handler){
+		String apiUrl = getApiUrl("/statuses/retweet/"+ id+".json");
+		RequestParams params = new RequestParams();
+		params.put("format", "json");
+		params.put("id", id);
+		client.post(apiUrl, params, handler);
+	}
+
+	public void getDirectMessages(String maxId, AsyncHttpResponseHandler handler){
+
+		String apiUrl = getApiUrl("/direct_messages.json");
+		// Can specify query string params directly or through RequestParams.
+		RequestParams params = new RequestParams();
+		params.put("format", "json");
+		if(maxId!=null)
+			params.put("max_id", maxId);
+		client.get(apiUrl, params, handler);
+
 	}
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
 	 * 	  i.e getApiUrl("statuses/home_timeline.json");

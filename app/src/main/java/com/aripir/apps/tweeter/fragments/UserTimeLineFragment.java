@@ -3,11 +3,13 @@ package com.aripir.apps.tweeter.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aripir.apps.tweeter.listeners.EndlessRecyclerViewScrollListener;
 import com.aripir.apps.tweeter.network.TwitterApplication;
 import com.aripir.apps.tweeter.network.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -24,6 +26,8 @@ import cz.msebera.android.httpclient.Header;
 public class UserTimeLineFragment extends TweetsListFragment {
 
     private TwitterClient twitterClient;
+    private EndlessRecyclerViewScrollListener scrollListener;
+
 
     public static UserTimeLineFragment newInstance(String screenName){
         UserTimeLineFragment userTimeLineFragment = new UserTimeLineFragment();
@@ -71,6 +75,15 @@ public class UserTimeLineFragment extends TweetsListFragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                pbLoadMore.setVisibility(View.VISIBLE);
+                populateUserTimeLine(getCurrentMaxId());
+            }
+        };
+
+        rvTweets.addOnScrollListener(scrollListener);
 
         Log.d("DEBUG", "onViewCreated");
     }
@@ -80,7 +93,7 @@ public class UserTimeLineFragment extends TweetsListFragment {
     private void populateUserTimeLine(String maxId) {
 
         String screenName = getArguments().getString("screen_name");
-        twitterClient.getUserTimeline(screenName, new JsonHttpResponseHandler(){
+        twitterClient.getUserTimeline(screenName, maxId, new JsonHttpResponseHandler(){
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

@@ -2,6 +2,7 @@ package com.aripir.apps.tweeter.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -17,7 +18,7 @@ import com.aripir.apps.tweeter.adapters.TweetAdapter;
 import com.aripir.apps.tweeter.listeners.EndlessRecyclerViewScrollListener;
 import com.aripir.apps.tweeter.models.Tweet;
 import com.aripir.apps.tweeter.network.TwitterClient;
-import com.codepath.apps.tweeter.R;
+import com.aripir.apps.tweeter.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +31,7 @@ import java.util.List;
  * Created by saripirala on 10/3/17.
  */
 
-public class TweetsListFragment extends Fragment implements NewTweetDialogFragment.OnCompleteListener {
+public class TweetsListFragment extends Fragment implements NewTweetDialogFragment.NewTweetDialogListener {
 
     protected TweetAdapter tweetAdapter;
     protected LinearLayoutManager layoutManager;
@@ -40,6 +41,7 @@ public class TweetsListFragment extends Fragment implements NewTweetDialogFragme
     protected SwipeRefreshLayout swipeContainer;
     protected ProgressBar pbLoadMore;
     protected ProgressBar pbLoading;
+    protected FloatingActionButton newTweetBtn;
 
     @Nullable
     @Override
@@ -61,6 +63,7 @@ public class TweetsListFragment extends Fragment implements NewTweetDialogFragme
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
         pbLoadMore = (ProgressBar) view.findViewById(R.id.pbLoadMore);
+        newTweetBtn =  (FloatingActionButton) view.findViewById(R.id.newTweetBtn);
 
         return view;
     }
@@ -123,9 +126,7 @@ public class TweetsListFragment extends Fragment implements NewTweetDialogFragme
 
 
     @Override
-    public void onComplete(String tweetText) {
-        clearTweets();
-        activateLoading();
-       // postTweet(tweetText);
+    public void onFinishEditDialog(String inputText) {
+
     }
 }

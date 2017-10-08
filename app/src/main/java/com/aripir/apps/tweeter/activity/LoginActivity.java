@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.View;
 
 import com.aripir.apps.tweeter.network.TwitterClient;
-import com.codepath.apps.tweeter.R;
+import com.aripir.apps.tweeter.R;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {

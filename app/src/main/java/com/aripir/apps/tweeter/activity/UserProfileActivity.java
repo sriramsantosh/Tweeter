@@ -1,31 +1,35 @@
 package com.aripir.apps.tweeter.activity;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aripir.apps.tweeter.R;
 import com.aripir.apps.tweeter.fragments.UserTimeLineFragment;
 import com.aripir.apps.tweeter.models.User;
 import com.aripir.apps.tweeter.network.TwitterApplication;
 import com.aripir.apps.tweeter.network.TwitterClient;
+import com.aripir.apps.tweeter.utils.CommonLib;
 import com.bumptech.glide.Glide;
-import com.aripir.apps.tweeter.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
+
 
 import cz.msebera.android.httpclient.Header;
 
-public class ProfileActivity extends AppCompatActivity {
+/**
+ * Created by saripirala on 10/7/17.
+ */
+
+public class UserProfileActivity extends AppCompatActivity {
 
     TwitterClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +39,6 @@ public class ProfileActivity extends AppCompatActivity {
         String screenName = getIntent().getStringExtra("screen_name");
 
         UserTimeLineFragment userTimeLineFragment = UserTimeLineFragment.newInstance(screenName);
-        //Create user frg
 
         //Display  user timeline frag dynamically
 
@@ -45,12 +48,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient();
 
-        client.getUserInfo(new JsonHttpResponseHandler(){
+        client.getUserLookupInfo(screenName, new JsonHttpResponseHandler(){
+
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 try{
-                    User user = User.fromJSON(response);
-                    getSupportActionBar().setTitle(user.screenName);
+                    User user = User.fromJSON(response.getJSONObject(0));
+                   // getSupportActionBar().setTitle(user.screenName);
                     populateUserHeadline(user);
 
                 }catch (JSONException e){
@@ -70,11 +74,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         ImageView ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
 
-
         tvName.setText(user.name);
         tvTagLine.setText(user.tagLine);
-        tvFollowers.setText(user.followersCount + " Followers");
+        Double followersCount = 1.0* (user.followersCount);
+        String followersCountStr = CommonLib.withSuffix(followersCount);
+
+        tvFollowers.setText(followersCountStr + " Followers");
         tvFollowing.setText(user.followingCount + " Following");
-        Glide.with(this).load(user.profieImageUrl).into(ivProfileImage);
+        Glide.with(this).load(user.profieImageUrl).centerCrop().into(ivProfileImage);
     }
 }

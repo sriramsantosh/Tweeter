@@ -19,7 +19,7 @@ public class User {
     public int followingCount;
 
 
-    public static  User fromJSON(JSONObject jsonObject) throws JSONException{
+    public static User fromJSON(JSONObject jsonObject) throws JSONException{
         User user =  new User();
 
         user.name = jsonObject.getString("name");

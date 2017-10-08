@@ -9,12 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.aripir.apps.tweeter.listeners.EndlessRecyclerViewScrollListener;
 import com.aripir.apps.tweeter.network.TwitterApplication;
 import com.aripir.apps.tweeter.network.TwitterClient;
-import com.codepath.apps.tweeter.R;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -27,7 +26,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by saripirala on 10/3/17.
  */
 
-public class HomeTimeLineFragment extends TweetsListFragment implements NewTweetDialogFragment.OnCompleteListener{
+public class HomeTimeLineFragment extends TweetsListFragment implements NewTweetDialogFragment.NewTweetDialogListener {
 
     private TwitterClient twitterClient;
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -41,8 +40,6 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        twitterClient = TwitterApplication.getRestClient();
-        populateTimeLine(null);
     }
 
     @Override
@@ -52,6 +49,7 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
 
         pbLoading.setVisibility(View.VISIBLE);
 
+        twitterClient = TwitterApplication.getRestClient();
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -80,6 +78,15 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+
+        newTweetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onNewTweet(view);
+            }
+        });
+
+        populateTimeLine(null);
 
         Log.d("DEBUG", "onViewCreated");
     }
@@ -123,20 +130,12 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
     }
 
 
-    @Override
-    public void onComplete(String tweetText) {
-        clearTweets();
-        activateLoading();
-        postTweet(tweetText);
-    }
-
     private void postTweet(String tweetText){
 
         twitterClient.composeTweet(tweetText, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Log.d("SUCCESS", new String(responseBody));
-                //tweets.clear();
                 populateTimeLine(null);
             }
 
@@ -157,4 +156,19 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
     }
 
 
+    @Override
+    public void onFinishEditDialog(String tweetText) {
+        clearTweets();
+        activateLoading();
+        postTweet(tweetText);
+    }
+
+
+
+    public void onNewTweet(View view) {
+        FragmentManager fm = getFragmentManager();
+        NewTweetDialogFragment newTweetDialogFragment = NewTweetDialogFragment.newInstance("Compose Tweet");
+        newTweetDialogFragment.setTargetFragment(HomeTimeLineFragment.this, 300);
+        newTweetDialogFragment.show(fm, "fragment_edit_name");
+    }
 }
