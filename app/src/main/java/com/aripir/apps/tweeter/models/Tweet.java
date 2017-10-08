@@ -46,16 +46,13 @@ public class Tweet {
             JSONObject entities = jsonObject.getJSONObject("entities");
             if(entities.has("media")) {
                 JSONArray media = entities.getJSONArray("media");
-
                 if (media.length() > 0)
                     tweet.tweetImageUrl = media.getJSONObject(0).getString("media_url_https");
-                System.out.println(tweet.tweetImageUrl);
             }
         }
         return tweet;
     }
 
-    // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
     public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
@@ -103,8 +100,7 @@ public class Tweet {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        //Log.d("DEBUG: relativeDate = ", relativeDate);
-        //Log.d("DEBUG: reformatted = ", reformattedStr);
+
         return reformattedStr.replace(" ", "");
     }
 

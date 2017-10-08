@@ -58,7 +58,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         return mDirectMessages.size();
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView ivProfileImage;
@@ -81,7 +80,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     Intent intent = new Intent(view.getContext(), UserProfileActivity.class);
                     intent.putExtra("screen_name", dm.getSender().getName());
                     view.getContext().startActivity(intent);
-
                 }
             });
 

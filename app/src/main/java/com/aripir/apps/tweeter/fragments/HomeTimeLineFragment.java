@@ -164,7 +164,6 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
     }
 
 
-
     public void onNewTweet(View view) {
         FragmentManager fm = getFragmentManager();
         NewTweetDialogFragment newTweetDialogFragment = NewTweetDialogFragment.newInstance("Compose Tweet");

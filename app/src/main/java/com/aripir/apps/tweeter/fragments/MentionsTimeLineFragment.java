@@ -25,8 +25,8 @@ import cz.msebera.android.httpclient.Header;
 
 public class MentionsTimeLineFragment extends TweetsListFragment {
 
-
     private TwitterClient twitterClient;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Nullable
     @Override
@@ -47,6 +47,19 @@ public class MentionsTimeLineFragment extends TweetsListFragment {
         // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
 
         pbLoading.setVisibility(View.VISIBLE);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if(!getCurrentMaxId().equalsIgnoreCase(maxId)) {
+                    pbLoadMore.setVisibility(View.VISIBLE);
+                    populateMentionsTimeLine(getCurrentMaxId());
+                }
+            }
+        };
+
+        rvTweets.addOnScrollListener(scrollListener);
+
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -110,10 +123,12 @@ public class MentionsTimeLineFragment extends TweetsListFragment {
     }
 
 
-    public void swipeToRefresh() {
+    private void swipeToRefresh() {
         tweets.clear();
         tweetAdapter.notifyDataSetChanged();
         populateMentionsTimeLine(null); // This will bring the latest 25 tweets
         swipeContainer.setRefreshing(false);
     }
+
+
 }

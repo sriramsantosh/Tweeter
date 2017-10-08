@@ -2,7 +2,6 @@ package com.aripir.apps.tweeter.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -13,14 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-
 import com.aripir.apps.tweeter.R;
 import com.aripir.apps.tweeter.adapters.MessageAdapter;
-import com.aripir.apps.tweeter.adapters.TweetAdapter;
 import com.aripir.apps.tweeter.listeners.EndlessRecyclerViewScrollListener;
 import com.aripir.apps.tweeter.models.DirectMessage;
-import com.aripir.apps.tweeter.models.Tweet;
 import com.aripir.apps.tweeter.network.TwitterApplication;
 import com.aripir.apps.tweeter.network.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -50,6 +45,7 @@ public class MessagesFragment extends Fragment {
     private ProgressBar pbLoading;
     private TwitterClient twitterClient;
     private EndlessRecyclerViewScrollListener scrollListener;
+    private static String maxId;
 
     @Nullable
     @Override
@@ -85,7 +81,8 @@ public class MessagesFragment extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 pbLoadMore.setVisibility(View.VISIBLE);
-                populateMessages(getCurrentMaxId());
+                if(!getCurrentMaxId().equalsIgnoreCase(maxId))
+                    populateMessages(getCurrentMaxId());
             }
         };
 
@@ -117,8 +114,8 @@ public class MessagesFragment extends Fragment {
             }catch (JSONException e){
                 Log.d("DEBUG", e.getLocalizedMessage());
             }
-
         }
+        maxId = getCurrentMaxId();
         messageAdapter.notifyDataSetChanged();
     }
 

@@ -42,6 +42,7 @@ public class TweetsListFragment extends Fragment implements NewTweetDialogFragme
     protected ProgressBar pbLoadMore;
     protected ProgressBar pbLoading;
     protected FloatingActionButton newTweetBtn;
+    static String maxId;
 
     @Nullable
     @Override
@@ -75,14 +76,13 @@ public class TweetsListFragment extends Fragment implements NewTweetDialogFragme
                 JSONObject responseJson = response.getJSONObject(i);
                 Tweet tweet = Tweet.fromJSON(responseJson);
                 tweets.add(tweet);
-                //tweetAdapter.notifyItemInserted(tweets.size()-1);
 
             }catch (JSONException e){
                 Log.d("DEBUG", e.getLocalizedMessage());
             }
 
         }
-
+        maxId = getCurrentMaxId();
         tweetAdapter.notifyDataSetChanged();
     }
 
