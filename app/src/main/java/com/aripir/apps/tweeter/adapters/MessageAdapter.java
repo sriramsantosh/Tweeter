@@ -78,7 +78,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 public void onClick(View view) {
                     DirectMessage dm = mDirectMessages.get(getLayoutPosition());
                     Intent intent = new Intent(view.getContext(), UserProfileActivity.class);
-                    intent.putExtra("screen_name", dm.getSender().getName());
+                    intent.putExtra("screen_name", dm.getSender().getHandle());
                     view.getContext().startActivity(intent);
                 }
             });
