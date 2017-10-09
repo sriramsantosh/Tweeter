@@ -3,13 +3,18 @@ package com.aripir.apps.tweeter.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 /**
  * Created by saripirala on 10/8/17.
  */
 
+@Parcel
 public class DirectMessage {
 
+    public DirectMessage(){
+
+    }
     private String messageText;
     private String id;
 

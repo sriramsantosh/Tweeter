@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.aripir.apps.tweeter.R;
 import com.aripir.apps.tweeter.fragments.UserTimeLineFragment;
+import com.aripir.apps.tweeter.models.DirectMessage;
 import com.aripir.apps.tweeter.models.User;
 import com.aripir.apps.tweeter.network.TwitterApplication;
 import com.aripir.apps.tweeter.network.TwitterClient;
@@ -18,6 +19,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.parceler.Parcels;
 
 
 import cz.msebera.android.httpclient.Header;
@@ -36,11 +38,12 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
-        String screenName = getIntent().getStringExtra("screen_name");
+
+        DirectMessage dm = Parcels.unwrap(getIntent().getParcelableExtra("dm"));
+
+        String screenName = dm.getSender().getHandle();
 
         UserTimeLineFragment userTimeLineFragment = UserTimeLineFragment.newInstance(screenName);
-
-        //Display  user timeline frag dynamically
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.flContainer, userTimeLineFragment);
@@ -54,9 +57,7 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 try{
                     User user = User.fromJSON(response.getJSONObject(0));
-                   // getSupportActionBar().setTitle(user.screenName);
                     populateUserHeadline(user);
-
                 }catch (JSONException e){
 
                 }

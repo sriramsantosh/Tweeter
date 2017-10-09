@@ -2,14 +2,19 @@ package com.aripir.apps.tweeter.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 /**
  * Created by saripirala on 10/8/17.
  */
 
+@Parcel
 public class Sender {
 
 
+    public Sender(){
+
+    }
     private String name;
     private String profileImageUrl;
     private String handle;

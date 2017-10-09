@@ -15,6 +15,8 @@ import com.aripir.apps.tweeter.models.DirectMessage;
 
 import com.bumptech.glide.Glide;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 /**
@@ -78,7 +80,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 public void onClick(View view) {
                     DirectMessage dm = mDirectMessages.get(getLayoutPosition());
                     Intent intent = new Intent(view.getContext(), UserProfileActivity.class);
-                    intent.putExtra("screen_name", dm.getSender().getHandle());
+                    intent.putExtra("dm", Parcels.wrap(dm));
+                    //intent.putExtra("screen_name", dm.getSender().getHandle());
                     view.getContext().startActivity(intent);
                 }
             });
