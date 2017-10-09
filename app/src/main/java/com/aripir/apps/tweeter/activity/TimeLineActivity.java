@@ -1,6 +1,9 @@
 package com.aripir.apps.tweeter.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +19,14 @@ import com.aripir.apps.tweeter.R;
 import com.aripir.apps.tweeter.fragments.ReplyTweetDialogFragment;
 import com.aripir.apps.tweeter.network.TwitterApplication;
 import com.aripir.apps.tweeter.network.TwitterClient;
+import com.aripir.apps.tweeter.utils.CommonLib;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -143,7 +150,8 @@ public class TimeLineActivity extends AppCompatActivity implements ReplyTweetDia
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("FAILURE", errorResponse.toString());
-                Log.d("FAILURE", throwable.toString());            }
+                Log.d("FAILURE", throwable.toString());
+            }
         });
 
     }

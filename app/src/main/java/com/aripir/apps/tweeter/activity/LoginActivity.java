@@ -1,12 +1,16 @@
 package com.aripir.apps.tweeter.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 
 import com.aripir.apps.tweeter.network.TwitterClient;
 import com.aripir.apps.tweeter.R;
+import com.aripir.apps.tweeter.utils.CommonLib;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
@@ -15,6 +19,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		checkForInternetAndNavigate();
 	}
 
 
@@ -47,5 +52,25 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	public void loginToRest(View view) {
 		getClient().connect();
 	}
+
+
+	private void checkForInternetAndNavigate() {
+		if( !isNetworkAvailable() && !CommonLib.isOnline()){
+			navitageToNoInternetActivity();
+		}
+	}
+
+	private void navitageToNoInternetActivity(){
+		Intent intent = new Intent(this, NoInternetConnectionActivity.class);
+		startActivity(intent);
+	}
+
+	private Boolean isNetworkAvailable() {
+		ConnectivityManager connectivityManager
+				= (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+	}
+
 
 }

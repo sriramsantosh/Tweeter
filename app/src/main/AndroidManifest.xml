@@ -5,6 +5,8 @@
     android:versionName="1.0">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -33,6 +35,12 @@
                     android:scheme="@string/intent_scheme" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.aripir.apps.tweeter.activity.NoInternetConnectionActivity"
+            android:label="@string/no_internet_connection">
+        </activity>
+
         <activity android:name="com.aripir.apps.tweeter.activity.TimeLineActivity" />
         <activity android:name="com.aripir.apps.tweeter.activity.ProfileActivity"></activity>
         <activity android:name="com.aripir.apps.tweeter.activity.UserProfileActivity"></activity>
