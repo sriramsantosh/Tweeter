@@ -20,30 +20,27 @@ import android.widget.Toast;
 
 import com.aripir.apps.tweeter.R;
 
-
 /**
- * Created by saripirala on 9/26/17.
+ * Created by saripirala on 10/8/17.
  */
 
-public class NewTweetDialogFragment extends DialogFragment implements TextView.OnEditorActionListener{
+public class ReplyTweetDialogFragment extends DialogFragment implements TextView.OnEditorActionListener{
 
-    private EditText mEtTweetBody;
+    private EditText mEtReplyText;
     private Button mBtnTweet;
-    private TextView mEtCharacterCount;
-    private NewTweetDialogListener listener;
+    private NewTweetDialogFragment.NewTweetDialogListener listener;
     private ImageButton ibCancel;
 
-
-    public NewTweetDialogFragment() {
+    public ReplyTweetDialogFragment() {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
     }
 
-    public static NewTweetDialogFragment newInstance(String title) {
-        NewTweetDialogFragment frag = new NewTweetDialogFragment();
+    public static ReplyTweetDialogFragment newInstance(String title) {
+        ReplyTweetDialogFragment frag = new ReplyTweetDialogFragment();
         Bundle args = new Bundle();
-        args.putString("Compose tweet", title);
+        args.putString("Reply tweet", title);
         frag.setArguments(args);
         return frag;
     }
@@ -51,28 +48,25 @@ public class NewTweetDialogFragment extends DialogFragment implements TextView.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_new_tweet, container);
+        return inflater.inflate(R.layout.fragment_reply, container);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Get field from view
-        mEtTweetBody = (EditText) view.findViewById(R.id.etReply);
+        mEtReplyText = (EditText) view.findViewById(R.id.etReply);
         mBtnTweet = (Button) view.findViewById(R.id.newTweetBtn);
-        mEtCharacterCount = (TextView) view.findViewById(R.id.etCharacterCount);
         ibCancel = (ImageButton) view.findViewById(R.id.ibCancel);
 
-        //this.mListener = (OnCompleteListener) getActivity();
-
-        listener = (NewTweetDialogListener) getTargetFragment();
+        listener = (NewTweetDialogFragment.NewTweetDialogListener) getTargetFragment();
 
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "Compose tweet");
         getDialog().setTitle(title);
         // Show soft keyboard automatically and request focus to field
-        mEtTweetBody.requestFocus();
-        mEtTweetBody.setSelection(0);
+        mEtReplyText.requestFocus();
+        mEtReplyText.setSelection(0);
 
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -80,38 +74,12 @@ public class NewTweetDialogFragment extends DialogFragment implements TextView.O
             @Override
             public void onClick(View view) {
 
-                if(mEtTweetBody.getText().length() > 140) {
+                if(mEtReplyText.getText().length() > 140) {
                     Toast.makeText(view.getContext(), "Sorry, only 140 characters are allowed!", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    //mListener.onComplete(mEtTweetBody.getText().toString());
                     sendBackResult();
-                    //dismiss();
                 }
-            }
-        });
-
-
-        mEtTweetBody.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.d("DEBUG", "Here");
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                int length = charSequence.length();
-                mEtCharacterCount.setText(""+ (140-length));
-
-                if(length>140)
-                    mEtCharacterCount.setTextColor(Color.RED);
-                else mEtCharacterCount.setTextColor(Color.GRAY);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                Log.d("DEBUG", "Here");
             }
         });
 
@@ -121,7 +89,6 @@ public class NewTweetDialogFragment extends DialogFragment implements TextView.O
                 dismiss();
             }
         });
-
     }
 
     @Override
@@ -131,7 +98,7 @@ public class NewTweetDialogFragment extends DialogFragment implements TextView.O
 
 
 
-    public interface NewTweetDialogListener {
+    public interface ReplyTweetDialogListener {
         void onFinishEditDialog(String inputText);
     }
 
@@ -139,10 +106,11 @@ public class NewTweetDialogFragment extends DialogFragment implements TextView.O
     public void sendBackResult() {
         // Notice the use of `getTargetFragment` which will be set when the dialog is displayed
 
-        listener.onFinishEditDialog(mEtTweetBody.getText().toString());
+        listener.onFinishEditDialog(mEtReplyText.getText().toString());
         dismiss();
     }
 
 
 
 }
+

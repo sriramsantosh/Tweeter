@@ -33,7 +33,6 @@ public class UserTimeLineFragment extends TweetsListFragment {
         UserTimeLineFragment userTimeLineFragment = new UserTimeLineFragment();
         Bundle bundle = new Bundle();
         bundle.putString("screen_name", screenName);
-
         userTimeLineFragment.setArguments(bundle);
         return userTimeLineFragment;
     }

@@ -46,12 +46,12 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         context =parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        RecyclerView.ViewHolder viewHolder = new BasicTweetViewHolder(inflater.inflate(R.layout.item_tweet, parent, false), mTweets);
+        RecyclerView.ViewHolder viewHolder = new BasicTweetViewHolder(inflater.inflate(R.layout.item_tweet, parent, false), context, mTweets);
 
         switch (viewType){
             case TWEET_TYPE_BASIC:
                 View basicTweetView = inflater.inflate(R.layout.item_tweet, parent, false);
-                viewHolder = new BasicTweetViewHolder(basicTweetView, mTweets);
+                viewHolder = new BasicTweetViewHolder(basicTweetView, context, mTweets);
                 break;
             case TWEET_TYPE_IMAGE:
                 View tweetImageView = inflater.inflate(R.layout.item_tweet_image, parent, false);

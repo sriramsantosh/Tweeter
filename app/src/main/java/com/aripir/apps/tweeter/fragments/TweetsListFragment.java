@@ -15,9 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.aripir.apps.tweeter.adapters.TweetAdapter;
-import com.aripir.apps.tweeter.listeners.EndlessRecyclerViewScrollListener;
 import com.aripir.apps.tweeter.models.Tweet;
-import com.aripir.apps.tweeter.network.TwitterClient;
 import com.aripir.apps.tweeter.R;
 
 import org.json.JSONArray;
@@ -31,7 +29,7 @@ import java.util.List;
  * Created by saripirala on 10/3/17.
  */
 
-public class TweetsListFragment extends Fragment implements NewTweetDialogFragment.NewTweetDialogListener {
+public class TweetsListFragment extends Fragment {
 
     protected TweetAdapter tweetAdapter;
     protected LinearLayoutManager layoutManager;
@@ -124,9 +122,4 @@ public class TweetsListFragment extends Fragment implements NewTweetDialogFragme
         pbLoadMore.setVisibility(View.GONE);
     }
 
-
-    @Override
-    public void onFinishEditDialog(String inputText) {
-
-    }
 }

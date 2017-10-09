@@ -37,7 +37,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         DirectMessage dm = mDirectMessages.get(position);
 
         holder.tvMessage.setText(dm.getMessageText());
-        holder.tvTwitterHandle.setText(dm.getSender().getHandle());
+        holder.tvTwitterHandle.setText("@" + dm.getSender().getHandle());
         holder.tvUserName.setText(dm.getSender().getName());
 
         Glide.with(context)

@@ -7,6 +7,7 @@
     <string name="intent_host">cprest</string>
     <string name="what_is_happening">What\'s happening ?</string>
     <string name="tweet">Tweet</string>
+    <string name="reply">Reply</string>
     <string name="oneforty">140</string>
 
 </resources>

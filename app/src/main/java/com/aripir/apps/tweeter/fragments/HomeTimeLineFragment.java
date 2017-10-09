@@ -170,4 +170,6 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
         newTweetDialogFragment.setTargetFragment(HomeTimeLineFragment.this, 300);
         newTweetDialogFragment.show(fm, "fragment_edit_name");
     }
+
+
 }

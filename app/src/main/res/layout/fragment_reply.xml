@@ -1,41 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
+
 
     <EditText
         android:id="@+id/etReply"
         android:layout_width="match_parent"
-        android:layout_height="325dp"
+        android:layout_height="100dp"
         android:gravity="top"
         android:ems="10"
         android:inputType="textMultiLine"
         android:layout_below="@+id/ibCancel"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        tools:ignore="LabelFor" />
 
     <Button
         android:id="@+id/newTweetBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="25dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/rounded_button"
-        android:text="@string/tweet"
+        android:text="@string/reply"
         android:textColor="@color/colorWhite"
         android:layout_below="@+id/etReply"
         android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:id="@+id/etCharacterCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/newTweetBtn"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="14dp"
-        android:layout_toStartOf="@+id/newTweetBtn"
-        android:text="@string/oneforty"
-        android:layout_marginBottom="25dp"
-        android:textColor="@color/colorBlack" />
 
     <ImageButton
         android:id="@+id/ibCancel"
@@ -44,5 +36,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@color/colorWhite"
-        app:srcCompat="@drawable/ic_action_cancel" />
+        app:srcCompat="@drawable/ic_action_cancel"
+        tools:ignore="ContentDescription" />
+
+
 </RelativeLayout>
