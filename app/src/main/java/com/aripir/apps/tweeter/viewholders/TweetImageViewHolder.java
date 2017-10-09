@@ -1,6 +1,10 @@
 package com.aripir.apps.tweeter.viewholders;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +14,7 @@ import android.widget.TextView;
 import com.aripir.apps.tweeter.R;
 import com.aripir.apps.tweeter.activity.ProfileActivity;
 import com.aripir.apps.tweeter.activity.UserProfileActivity;
+import com.aripir.apps.tweeter.fragments.ReplyTweetDialogFragment;
 import com.aripir.apps.tweeter.models.Tweet;
 import com.aripir.apps.tweeter.network.TwitterApplication;
 import com.aripir.apps.tweeter.network.TwitterClient;
@@ -43,12 +48,12 @@ public class TweetImageViewHolder extends RecyclerView.ViewHolder {
     public ImageView ivLikeImage;
     public TextView tvLikeCount;
     private TwitterClient client;
+    private Context context;
 
-
-    public TweetImageViewHolder(View itemView, final List<Tweet> tweets) {
+    public TweetImageViewHolder(View itemView, final Context context, final List<Tweet> tweets) {
         super(itemView);
         client = TwitterApplication.getRestClient();
-
+        this.context =context;
         ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
         tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
         tvBody = (TextView) itemView.findViewById(R.id.tvBody);
@@ -120,6 +125,29 @@ public class TweetImageViewHolder extends RecyclerView.ViewHolder {
                 }
             }
         });
+
+
+        ivReplyImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Tweet tweet = tweets.get(getLayoutPosition());
+
+                FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+                String screenName = tweet.user.screenName;
+                String id = tweet.id;
+
+                ReplyTweetDialogFragment replyTweetDialogFragment = ReplyTweetDialogFragment.newInstance("Reply Tweet");
+                Bundle bundle = new Bundle();
+                bundle.putString("screenName", screenName);
+                bundle.putString("id", id);
+
+                replyTweetDialogFragment.setArguments(bundle);
+                replyTweetDialogFragment.show(fm, "fragme_edit_name");
+
+            }
+        });
+
     }
 
     private void favoriteTweet(String id) {

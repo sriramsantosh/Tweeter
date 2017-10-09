@@ -6,15 +6,28 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import com.aripir.apps.tweeter.adapters.TweetsPagerAdapter;
 import com.aripir.apps.tweeter.R;
+import com.aripir.apps.tweeter.fragments.ReplyTweetDialogFragment;
+import com.aripir.apps.tweeter.network.TwitterApplication;
+import com.aripir.apps.tweeter.network.TwitterClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 
-public class TimeLineActivity extends AppCompatActivity  {
+public class TimeLineActivity extends AppCompatActivity implements ReplyTweetDialogFragment.OnCompleteListener {
 
     private TabLayout tabLayout;
+    private TwitterClient twitterClient;
 
 
     @Override
@@ -31,6 +44,7 @@ public class TimeLineActivity extends AppCompatActivity  {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
+        twitterClient = TwitterApplication.getRestClient();
     }
 
 
@@ -98,5 +112,40 @@ public class TimeLineActivity extends AppCompatActivity  {
 
     }
 
+
+    @Override
+    public void onComplete(String replyText, String id) {
+        Log.d("DEBUG", replyText);
+        replyToTweet(replyText, id);
+    }
+
+    private void replyToTweet(String status, String id){
+
+        twitterClient.sendReply(status, id, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d("SUCCESS", response.toString());
+                Toast.makeText(getApplicationContext(), "Tweet successfully sent", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("FAILURE", throwable.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("FAILURE", errorResponse.toString());
+                Log.d("FAILURE", throwable.toString());
+            }
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("FAILURE", errorResponse.toString());
+                Log.d("FAILURE", throwable.toString());            }
+        });
+
+    }
 
 }

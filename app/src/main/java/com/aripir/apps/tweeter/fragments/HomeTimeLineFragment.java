@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.aripir.apps.tweeter.listeners.EndlessRecyclerViewScrollListener;
+import com.aripir.apps.tweeter.models.Tweet;
 import com.aripir.apps.tweeter.network.TwitterApplication;
 import com.aripir.apps.tweeter.network.TwitterClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -171,5 +172,34 @@ public class HomeTimeLineFragment extends TweetsListFragment implements NewTweet
         newTweetDialogFragment.show(fm, "fragment_edit_name");
     }
 
+
+    private void replyToTweet(String status, String id){
+
+        twitterClient.sendReply(status, id, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d("SUCCESS", response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("FAILURE", throwable.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("FAILURE", errorResponse.toString());
+                Log.d("FAILURE", throwable.toString());
+            }
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("FAILURE", errorResponse.toString());
+                Log.d("FAILURE", throwable.toString());
+            }
+        });
+
+    }
 
 }

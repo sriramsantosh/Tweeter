@@ -1,5 +1,6 @@
 package com.aripir.apps.tweeter.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,8 +29,10 @@ public class ReplyTweetDialogFragment extends DialogFragment implements TextView
 
     private EditText mEtReplyText;
     private Button mBtnTweet;
-    private NewTweetDialogFragment.NewTweetDialogListener listener;
+    //private ReplyTweetDialogFragment.ReplyTweetDialogListener listener;
     private ImageButton ibCancel;
+    private OnCompleteListener mListener;
+
 
     public ReplyTweetDialogFragment() {
         // Empty constructor is required for DialogFragment
@@ -59,14 +62,20 @@ public class ReplyTweetDialogFragment extends DialogFragment implements TextView
         mBtnTweet = (Button) view.findViewById(R.id.newTweetBtn);
         ibCancel = (ImageButton) view.findViewById(R.id.ibCancel);
 
-        listener = (NewTweetDialogFragment.NewTweetDialogListener) getTargetFragment();
+       // listener = (ReplyTweetDialogFragment.ReplyTweetDialogListener) getTargetFragment();
 
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "Compose tweet");
         getDialog().setTitle(title);
         // Show soft keyboard automatically and request focus to field
         mEtReplyText.requestFocus();
-        mEtReplyText.setSelection(0);
+
+        String screenName = getArguments().getString("screenName");
+        String id = getArguments().getString("id");
+
+        mEtReplyText.setText("@" + screenName);
+
+        mEtReplyText.setSelection(screenName.length()+1);
 
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -78,7 +87,8 @@ public class ReplyTweetDialogFragment extends DialogFragment implements TextView
                     Toast.makeText(view.getContext(), "Sorry, only 140 characters are allowed!", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    sendBackResult();
+                    mListener.onComplete(mEtReplyText.getText().toString(), getArguments().getString("id"));
+                    dismiss();
                 }
             }
         });
@@ -98,18 +108,31 @@ public class ReplyTweetDialogFragment extends DialogFragment implements TextView
 
 
 
-    public interface ReplyTweetDialogListener {
-        void onFinishEditDialog(String inputText);
+//    public interface ReplyTweetDialogListener {
+//        void onFinishReplyDialog(String replyText, String id);
+//    }
+
+
+//    public void sendBackResult() {
+//        // Notice the use of `getTargetFragment` which will be set when the dialog is displayed
+//
+//        listener.onFinishReplyDialog(mEtReplyText.getText().toString(), getArguments().getString("id"));
+//        dismiss();
+//    }
+
+    public static interface OnCompleteListener {
+        public abstract void onComplete(String replyText, String id);
     }
 
-
-    public void sendBackResult() {
-        // Notice the use of `getTargetFragment` which will be set when the dialog is displayed
-
-        listener.onFinishEditDialog(mEtReplyText.getText().toString());
-        dismiss();
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            this.mListener = (OnCompleteListener) getActivity();
+        }catch (final ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " must implement OnCompleteListener");
+        }
     }
-
 
 
 }

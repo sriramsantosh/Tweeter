@@ -1,10 +1,13 @@
 package com.aripir.apps.tweeter.viewholders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -124,44 +127,21 @@ public class BasicTweetViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
 
                 Tweet tweet = tweets.get(getLayoutPosition());
+
+                FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
                 String screenName = tweet.user.screenName;
                 String id = tweet.id;
-                String status = "@" + screenName + " test text";
-                replyToTweet(status, id);
+
+                ReplyTweetDialogFragment replyTweetDialogFragment = ReplyTweetDialogFragment.newInstance("Reply Tweet");
+                Bundle bundle = new Bundle();
+                bundle.putString("screenName", screenName);
+                bundle.putString("id", id);
+
+                replyTweetDialogFragment.setArguments(bundle);
+                replyTweetDialogFragment.show(fm, "fragme_edit_name");
 
             }
         });
-    }
-
-
-    private void replyToTweet(String status, String id){
-
-        client.sendReply(status, id, new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("SUCCESS", response.toString());
-
-                Toast.makeText(itemView.getContext(), "Tweet successfully sent", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d("FAILURE", throwable.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Log.d("FAILURE", errorResponse.toString());
-                Log.d("FAILURE", throwable.toString());
-            }
-
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("FAILURE", errorResponse.toString());
-                Log.d("FAILURE", throwable.toString());            }
-        });
-
     }
 
     private void favoriteTweet(String id) {
@@ -185,9 +165,7 @@ public class BasicTweetViewHolder extends RecyclerView.ViewHolder {
                 Log.d("FAILURE", throwable.toString());
             }
         });
-
     }
-
 
     private void unFavoriteTweet(String id){
 
@@ -220,7 +198,8 @@ public class BasicTweetViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("FAILURE", errorResponse.toString());
-                Log.d("FAILURE", throwable.toString());            }
+                Log.d("FAILURE", throwable.toString());
+            }
         });
 
     }
@@ -261,7 +240,6 @@ public class BasicTweetViewHolder extends RecyclerView.ViewHolder {
         });
 
     }
-
 }
 
 

@@ -55,7 +55,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 break;
             case TWEET_TYPE_IMAGE:
                 View tweetImageView = inflater.inflate(R.layout.item_tweet_image, parent, false);
-                viewHolder = new TweetImageViewHolder(tweetImageView, mTweets);
+                viewHolder = new TweetImageViewHolder(tweetImageView,context,  mTweets);
                 break;
         }
 
@@ -89,8 +89,6 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return TWEET_TYPE_IMAGE;
         else
             return TWEET_TYPE_BASIC;
-
-        //return super.getItemViewType(position);
     }
 
     public void configureBasicTweetViewHolder(RecyclerView.ViewHolder viewHolder, int position)
